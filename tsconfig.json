@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["dom", "es2017"],
+    "outDir": "./",
+    "target": "es2015"
+  },
+  "indent": [true, "spaces", 2],
+  "include": ["./src/*.ts"],
+  "exclude": ["./node_modules"]
+}
