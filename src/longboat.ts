@@ -1,14 +1,14 @@
 interface ILongboatProperties {
-  [id: string]: string | number;
+  [id: string]: boolean | number | string;
 }
 
 interface IQueryTrackingObject extends ILongboatProperties {
-  ets: number;
   ht: string;
 }
 
 interface ITrackingProperties extends ILongboatProperties {
   eventType: string;
+  once?: boolean;
 }
 
 type TQueue = (() => void | ITrackingProperties)[];
@@ -27,14 +27,23 @@ export interface ILongboat {
     'test' = 'test',
   }
 
+  function validateProperties(checkProps: Partial<ILongboatProperties>) {
+    const status = ['aid', 'ht'].find(
+      (prop) => !checkProps.hasOwnProperty(prop)
+    );
+    return !status;
+  }
+
   class Longboat {
-    baseUrl = 'https://longboat.ekstrabladet.dk';
+    public queue: TQueue = [];
+
+    protected baseUrl = 'https://longboat.ekstrabladet.dk';
     properties: ILongboatProperties = {
       url: window.location.href,
     };
-    prevQueue: TQueue = [];
-    queue: TQueue = [];
-    readyStatus = false;
+    protected existingQueue: TQueue = [];
+    protected uniqueQueue: string[] = [];
+    protected readyStatus = false;
 
     constructor() {
       if (longboat) {
@@ -45,7 +54,7 @@ export interface ILongboat {
           };
         }
 
-        if (longboat.queue) this.prevQueue = longboat.queue;
+        if (longboat.queue) this.existingQueue = longboat.queue;
       }
 
       Object.defineProperty(this.queue, 'push', {
@@ -60,15 +69,50 @@ export interface ILongboat {
     }
 
     /**
+     * @description runs after longboat is initiated, to make sure all functionality is available
+     */
+    public ready() {
+      this.readyStatus = true;
+      this.resolveQueue(this.existingQueue);
+    }
+
+    public setEnvironment(environment: ENVIRONMENT) {
+      this.baseUrl =
+        environment.toLowerCase() === ENVIRONMENT.development ||
+        environment.toLowerCase() === ENVIRONMENT.test
+          ? 'https://longboat-test.ekstrabladet.dk'
+          : this.baseUrl;
+    }
+
+    public setProperties(propertiesObject: ILongboatProperties) {
+      this.properties = { ...this.properties, ...propertiesObject };
+    }
+
+    /**
      *
      * @param {IQueryTrackingObject} trackingObject
      */
-    buildQuery(trackingObject: IQueryTrackingObject) {
+    private buildQuery(trackingObject: IQueryTrackingObject, once = true) {
       try {
-        const queryArray = Object.entries({
+        if (once && !this.isUnique(trackingObject)) {
+          throw new Error(
+            `This has been tracked already ${trackingObject.ht} - ${trackingObject}`
+          );
+        }
+
+        const queryObject = {
           ...this.properties,
           ...trackingObject,
-        }).map(([key, value]) => `${key}=${value}`);
+          ets: Date.now(),
+        };
+
+        if (!validateProperties(queryObject)) {
+          throw new Error('Missing mandatory properties');
+        }
+
+        const queryArray = Object.entries(queryObject).map(
+          ([key, value]) => `${key}=${value}`
+        );
 
         this.send(`?${queryArray.join('&')}`);
       } catch (err) {
@@ -76,12 +120,13 @@ export interface ILongboat {
       }
     }
 
-    /**
-     * @description runs after longboat is initiated, to make sure all functionality is available
-     */
-    ready() {
-      this.readyStatus = true;
-      this.resolveQueue(this.prevQueue);
+    private isUnique(trackingObject: IQueryTrackingObject) {
+      const trackingObjectString = JSON.stringify(trackingObject);
+      const exists = this.uniqueQueue.find((el) => el === trackingObjectString);
+      if (exists) return false;
+
+      this.uniqueQueue.push(trackingObjectString);
+      return true;
     }
 
     /**
@@ -91,7 +136,7 @@ export interface ILongboat {
      *
      * @description run through queue and handle the added elements
      */
-    resolveQueue(queue: TQueue) {
+    private resolveQueue(queue: TQueue) {
       try {
         while (queue.length) {
           const addedObject = queue.shift();
@@ -103,7 +148,7 @@ export interface ILongboat {
               this.track(addedObject);
             }
           } else {
-            this.prevQueue.push(addedObject);
+            this.existingQueue.push(addedObject);
           }
         }
       } catch (err) {
@@ -111,7 +156,7 @@ export interface ILongboat {
       }
     }
 
-    send(query: string) {
+    private send(query: string) {
       try {
         window.navigator.sendBeacon(this.baseUrl + query);
       } catch (err) {
@@ -119,25 +164,16 @@ export interface ILongboat {
       }
     }
 
-    setEnvironment(environment: ENVIRONMENT) {
-      this.baseUrl =
-        environment.toLowerCase() === ENVIRONMENT.development || environment.toLowerCase() === ENVIRONMENT.test
-          ? 'https://longboat-test.ekstrabladet.dk'
-          : this.baseUrl;
-    }
+    private track(trackObj: ITrackingProperties) {
+      const { eventType, once, ...additionalProperties } = trackObj;
 
-    setProperties(propertiesObject: ILongboatProperties) {
-      this.properties = { ...this.properties, ...propertiesObject };
-    }
-
-    track(trackObj: ITrackingProperties) {
-      const { eventType, ...additionalProperties } = trackObj;
-
-      this.buildQuery({
-        ets: Date.now(),
-        ht: eventType,
-        ...additionalProperties,
-      });
+      this.buildQuery(
+        {
+          ht: eventType,
+          ...additionalProperties,
+        },
+        once
+      );
     }
   }
 

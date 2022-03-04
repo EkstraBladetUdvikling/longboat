@@ -38,7 +38,7 @@ export default {
     sourcemap: false,
     format: 'iife',
     name: 'longboat',
-    file: 'index.js',
+    file: 'longboat.js',
   },
   plugins,
 };

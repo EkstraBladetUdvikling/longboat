@@ -1,7 +1,7 @@
 {
   "name": "longboat",
   "version": "0.0.1",
-  "main": "index.js",
+  "main": "longboat.js",
   "license": "MIT",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.0.2",
@@ -16,12 +16,13 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prefer-arrow": "^1.2.3",
     "eslint-plugin-promise": "^6.0.0",
+    "jest": "^27.5.1",
     "rollup": "^2.68.0",
     "rollup-plugin-terser": "^7.0.2",
     "tslib": "^2.3.1",
     "typescript": "^4.6.2"
   },
   "scripts": {
-    "dist": "yarn tsc --project tsconfig.json"
+    "build": "yarn rollup -c"
   }
 }
