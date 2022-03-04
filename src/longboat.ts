@@ -1,182 +1,223 @@
 interface ILongboatProperties {
-  [id: string]: boolean | number | string;
+  bar: boolean;
+  cid: string;
+  ebid: string;
+  ets: number;
+  kh: boolean;
+  lis: boolean;
+  nt: string;
+  skid: number;
+  ssoid: string;
+  st: string;
+  url: string;
 }
 
-interface IQueryTrackingObject extends ILongboatProperties {
+type TLongboatProperties = Partial<ILongboatProperties>;
+
+interface IQueryTrackingObject extends TLongboatProperties {
   ht: string;
 }
 
-interface ITrackingProperties extends ILongboatProperties {
+interface ITrackingProperties extends TLongboatProperties {
   eventType: string;
   once?: boolean;
 }
 
-type TQueue = (() => void | ITrackingProperties)[];
+type TQueue = ((() => void) | ITrackingProperties)[];
 
 export interface ILongboat {
-  properties: ILongboatProperties;
+  properties: TLongboatProperties;
   queue: TQueue;
   ready: () => void;
 }
 
-((longboat) => {
-  enum ENVIRONMENT {
-    'development' = 'development',
-    'production' = 'production',
-    'staging' = 'staging',
-    'test' = 'test',
-  }
+enum ENVIRONMENT {
+  'debug' = 'debug',
+  'development' = 'development',
+  'production' = 'production',
+  'staging' = 'staging',
+  'test' = 'test',
+  'unittest' = 'unittest',
+}
 
-  function validateProperties(checkProps: Partial<ILongboatProperties>) {
-    const status = ['aid', 'ht'].find(
-      (prop) => !checkProps.hasOwnProperty(prop)
-    );
-    return !status;
-  }
+enum LONGBOATURLS {
+  'debug' = '',
+  'prod' = 'https://longboat.ekstrabladet.dk',
+  'test' = 'https://longboat-test.ekstrabladet.dk',
+}
 
-  class Longboat {
-    public queue: TQueue = [];
+function validateProperties(checkProps: TLongboatProperties) {
+  const status = ['aid', 'ht'].find((prop) => !checkProps.hasOwnProperty(prop));
+  return !status;
+}
 
-    protected baseUrl = 'https://longboat.ekstrabladet.dk';
-    properties: ILongboatProperties = {
-      url: window.location.href,
-    };
-    protected existingQueue: TQueue = [];
-    protected uniqueQueue: string[] = [];
-    protected readyStatus = false;
+export class Longboat {
+  public exposedQueue: TQueue = [];
+  public properties: TLongboatProperties = {
+    url: window.location.href,
+  };
+  public queue: TQueue = [];
 
-    constructor() {
-      if (longboat) {
-        if (longboat.properties) {
-          this.properties = {
-            ...this.properties,
-            ...longboat.properties,
-          };
-        }
+  protected baseUrl: LONGBOATURLS = LONGBOATURLS.prod;
+  protected environment: keyof typeof ENVIRONMENT = ENVIRONMENT.production;
+  protected existingQueue: TQueue = [];
+  protected uniqueEvents: { [id: string]: number } = {};
+  protected uniqueQueue: string[] = [];
+  protected readyStatus = false;
 
-        if (longboat.queue) this.existingQueue = longboat.queue;
-      }
-
-      Object.defineProperty(this.queue, 'push', {
-        configurable: false, // prevent further meddling...
-        enumerable: false, // hide from for...in
-        value: (...args: any[]) => {
-          this.resolveQueue(args);
-          return args.length;
-        },
-        writable: false, // see above ^
-      });
-    }
-
-    /**
-     * @description runs after longboat is initiated, to make sure all functionality is available
-     */
-    public ready() {
-      this.readyStatus = true;
-      this.resolveQueue(this.existingQueue);
-    }
-
-    public setEnvironment(environment: ENVIRONMENT) {
-      this.baseUrl =
-        environment.toLowerCase() === ENVIRONMENT.development ||
-        environment.toLowerCase() === ENVIRONMENT.test
-          ? 'https://longboat-test.ekstrabladet.dk'
-          : this.baseUrl;
-    }
-
-    public setProperties(propertiesObject: ILongboatProperties) {
-      this.properties = { ...this.properties, ...propertiesObject };
-    }
-
-    /**
-     *
-     * @param {IQueryTrackingObject} trackingObject
-     */
-    private buildQuery(trackingObject: IQueryTrackingObject, once = true) {
-      try {
-        if (once && !this.isUnique(trackingObject)) {
-          throw new Error(
-            `This has been tracked already ${trackingObject.ht} - ${trackingObject}`
-          );
-        }
-
-        const queryObject = {
+  constructor(longboat?) {
+    if (longboat) {
+      if (longboat.properties) {
+        this.properties = {
           ...this.properties,
-          ...trackingObject,
-          ets: Date.now(),
+          ...longboat.properties,
         };
-
-        if (!validateProperties(queryObject)) {
-          throw new Error('Missing mandatory properties');
-        }
-
-        const queryArray = Object.entries(queryObject).map(
-          ([key, value]) => `${key}=${value}`
-        );
-
-        this.send(`?${queryArray.join('&')}`);
-      } catch (err) {
-        console.error('longboat.buildQuery', err);
       }
+
+      if (longboat.queue) this.existingQueue = longboat.queue;
     }
 
-    private isUnique(trackingObject: IQueryTrackingObject) {
-      const trackingObjectString = JSON.stringify(trackingObject);
-      const exists = this.uniqueQueue.find((el) => el === trackingObjectString);
-      if (exists) return false;
+    Object.defineProperty(this.queue, 'push', {
+      configurable: false, // prevent further meddling...
+      enumerable: false, // hide from for...in
+      value: (...args: any[]) => {
+        this.resolveQueue(args);
+        return args.length;
+      },
+      writable: false, // see above ^
+    });
+  }
 
-      this.uniqueQueue.push(trackingObjectString);
-      return true;
+  /**
+   * @description runs after longboat is initiated, to make sure all functionality is available
+   */
+  public ready() {
+    this.readyStatus = true;
+    this.resolveQueue(this.existingQueue);
+  }
+
+  public setEnvironment(environment: keyof typeof ENVIRONMENT) {
+    switch (environment.toLowerCase()) {
+      case ENVIRONMENT.debug:
+        this.baseUrl = LONGBOATURLS.debug;
+        break;
+      case ENVIRONMENT.development:
+      case ENVIRONMENT.test:
+        this.baseUrl = LONGBOATURLS.test;
+        break;
+      case ENVIRONMENT.production:
+      case ENVIRONMENT.staging:
+      default:
+        this.baseUrl = LONGBOATURLS.prod;
+        break;
     }
+    this.environment = environment;
+  }
 
-    /**
-     * resolveQueue
-     *
-     * @param {TQueue} queue
-     *
-     * @description run through queue and handle the added elements
-     */
-    private resolveQueue(queue: TQueue) {
-      try {
-        while (queue.length) {
-          const addedObject = queue.shift();
-
-          if (this.readyStatus) {
-            if (typeof addedObject === 'function') {
-              addedObject();
-            } else if ((addedObject as ITrackingProperties).eventType) {
-              this.track(addedObject);
-            }
-          } else {
-            this.existingQueue.push(addedObject);
-          }
-        }
-      } catch (err) {
-        console.log('longboat.resolveQueue', err);
-      }
-    }
-
-    private send(query: string) {
-      try {
-        window.navigator.sendBeacon(this.baseUrl + query);
-      } catch (err) {
-        console.error('longboat.send', err, 'query', query);
-      }
-    }
-
-    private track(trackObj: ITrackingProperties) {
-      const { eventType, once, ...additionalProperties } = trackObj;
-
-      this.buildQuery(
-        {
-          ht: eventType,
-          ...additionalProperties,
-        },
-        once
-      );
+  public setProperties(propertiesObject: TLongboatProperties) {
+    try {
+      this.properties = { ...this.properties, ...propertiesObject };
+    } catch (err) {
+      console.error('longboat.setProperties', err);
     }
   }
 
-  window.longboat = new Longboat();
-  window.longboat.ready();
-})(window.longboat);
+  /**
+   *
+   * @param {IQueryTrackingObject} trackingObject
+   */
+  private buildQuery(trackingObject: IQueryTrackingObject, once = true) {
+    try {
+      if (once && !this.isUnique(trackingObject)) {
+        console.warn(
+          `This has been tracked already ${
+            trackingObject.ht
+          } - ${JSON.stringify(trackingObject)}`
+        );
+        return;
+      }
+
+      const queryObject = {
+        ...this.properties,
+        ...trackingObject,
+        ets: Date.now(),
+      };
+
+      if (!validateProperties(queryObject)) {
+        console.warn('Missing mandatory properties');
+        return;
+      }
+
+      const queryArray = Object.entries(queryObject).map(
+        ([key, value]) => `${key}=${value}`
+      );
+
+      this.send(`?${queryArray.join('&')}`);
+    } catch (err) {
+      console.error('longboat.buildQuery', err);
+    }
+  }
+
+  private isUnique(trackingObject: IQueryTrackingObject) {
+    const trackingObjectString = JSON.stringify(trackingObject);
+    const exists = this.uniqueQueue.find((el) => el === trackingObjectString);
+    if (exists) return false;
+
+    this.uniqueQueue.push(trackingObjectString);
+    return true;
+  }
+
+  /**
+   * resolveQueue
+   *
+   * @param {TQueue} queue
+   *
+   * @description run through queue and handle the added elements
+   */
+  private resolveQueue(queue: TQueue) {
+    try {
+      while (queue.length) {
+        const addedObject = queue.shift();
+        if (this.environment === ENVIRONMENT.debug) {
+          this.exposedQueue.push(addedObject);
+        }
+        if (this.readyStatus) {
+          if (typeof addedObject === 'function') {
+            addedObject();
+          } else if ((addedObject as ITrackingProperties).eventType) {
+            this.track(addedObject);
+          }
+        } else {
+          this.existingQueue.push(addedObject);
+        }
+      }
+    } catch (err) {
+      console.error('longboat.resolveQueue', err);
+    }
+  }
+
+  private send(query: string) {
+    try {
+      if (this.baseUrl === LONGBOATURLS.debug) {
+        console.log('send this:', query);
+      } else {
+        window.navigator.sendBeacon(this.baseUrl + query);
+      }
+    } catch (err) {
+      console.error('longboat.send', err, 'query', query);
+    }
+  }
+
+  private track(trackObj: ITrackingProperties) {
+    const { eventType, once, ...additionalProperties } = trackObj;
+    this.uniqueEvents[eventType] = this.uniqueEvents[eventType] || 0;
+    this.uniqueEvents[eventType]++;
+    this.buildQuery(
+      {
+        ht: eventType,
+        ...additionalProperties,
+      },
+      once
+    );
+  }
+}

@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "lib": ["dom", "es2017"],
     "outDir": "./",
     "target": "es2015"
   },
   "indent": [true, "spaces", 2],
-  "include": ["./src/*.ts"],
+  "include": ["./src/*.ts", "src/longboat.test.js"],
   "exclude": ["./node_modules"]
 }

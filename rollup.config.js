@@ -33,7 +33,7 @@ const plugins = [
 ];
 
 export default {
-  input: 'src/longboat.ts',
+  input: 'src/index.ts',
   output: {
     sourcemap: false,
     format: 'iife',
