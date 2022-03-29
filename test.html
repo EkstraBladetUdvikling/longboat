@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script>
+      window.longboat = window.longboat || {};
+      window.longboat.queue = window.longboat.queue || [];
+
+      window.longboat.queue.push(() => {
+        window.longboat.setEnvironment('debug');
+
+        window.longboat.setProperties({
+          aid: 4,
+          cid: '',
+          skid: '',
+          st: '',
+        });
+      });
+      window.longboat.queue.push({
+        eventType: 'pageview',
+        once: true,
+      });
+    </script>
+    <script async defer src="longboat.js"></script>
+  </head>
+  <body>
+    <h1>Test longboat</h1>
+    <p>Open console to see what we would be sending</p>
+    <p>
+      <button
+        onclick="window.longboat.queue.push({eventType: 'click', once: false});"
+      >
+        Track click (can be tracked multiple times)
+      </button>
+    </p>
+    <p>
+      <button
+        onclick="window.longboat.queue.push({
+        eventType: 'click',
+        extlt: 'content-embed',
+        extld: 'href',
+        once: true
+        });"
+      >
+        Track click (can only be tracked once)
+      </button>
+    </p>
+  </body>
+</html>

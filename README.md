@@ -1,10 +1,8 @@
-Optional Logo
-
 # Longboat
 
 > Tagline
 
-Short description on the project.
+Longboat is Ekstra Bladets inhouse web analytics system.
 
 Screenshot?
 
@@ -32,7 +30,21 @@ npm i name-here
 
 ### Usage
 
-Code examples. How to use module.
+For basic setup of longboat we recommend using the snippet below. This sets up
+a tracking queue, and allows pushing to said queue before longboat is ready to
+recieve and dispatch tracking events.
+
+By default nothing is tracked.
+
+```js
+<script>
+window.longboat = window.longboat || {};
+window.longboat.queue = window.longboat.queue || [];
+</script>
+<script async defer src="longboat.js"></script>
+```
+
+
 
 ### Examples
 

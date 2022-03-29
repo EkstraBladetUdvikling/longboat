@@ -1,7 +1,7 @@
 {
   "name": "longboat",
   "version": "0.0.1",
-  "main": "index.js",
+  "main": "longboat.js",
   "license": "MIT",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.0.2",
@@ -22,6 +22,7 @@
     "typescript": "^4.6.2"
   },
   "scripts": {
-    "dist": "yarn tsc --project tsconfig.json"
+    "build": "yarn rollup -c",
+    "declare": "yarn tsc src/longboat.ts --declaration --emitDeclarationOnly"
   }
 }
