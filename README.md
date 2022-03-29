@@ -94,6 +94,7 @@ With those prerequisites in place the component is included with the following i
 <esi:include src="/ext_component/longboat/include.html"/>
 
 ## Docker
+
 Using the resulting docker image requires the environment variable
 
 FULL_URL_TO_EB_CMP_JS
