@@ -1,4 +1,4 @@
-import { TLongboatProperties, TQueue, ITrackingProperties } from './types';
+import type { TLongboatProperties, TQueue, ITrackingProperties } from './types';
 
 enum ENVIRONMENT {
   'debug' = 'debug',

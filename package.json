@@ -22,6 +22,7 @@
     "typescript": "^4.6.2"
   },
   "scripts": {
-    "build": "yarn rollup -c"
+    "build": "yarn rollup -c",
+    "declare": "yarn tsc src/longboat.ts --declaration --emitDeclarationOnly"
   }
 }
