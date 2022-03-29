@@ -8,6 +8,6 @@
     "target": "es2015"
   },
   "indent": [true, "spaces", 2],
-  "include": ["./src/*.ts", "src/longboat.test.js"],
+  "include": ["./src/*.ts"],
   "exclude": ["./node_modules"]
 }

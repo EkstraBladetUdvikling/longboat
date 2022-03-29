@@ -1,35 +1,4 @@
-interface ILongboatProperties {
-  bar: boolean;
-  cid: string;
-  ebid: string;
-  ets: number;
-  kh: boolean;
-  lis: boolean;
-  nt: string;
-  skid: number;
-  ssoid: string;
-  st: string;
-  url: string;
-}
-
-type TLongboatProperties = Partial<ILongboatProperties>;
-
-interface IQueryTrackingObject extends TLongboatProperties {
-  ht: string;
-}
-
-interface ITrackingProperties extends TLongboatProperties {
-  eventType: string;
-  once?: boolean;
-}
-
-type TQueue = ((() => void) | ITrackingProperties)[];
-
-export interface ILongboat {
-  properties: TLongboatProperties;
-  queue: TQueue;
-  ready: () => void;
-}
+import { TLongboatProperties, TQueue, ITrackingProperties } from './types';
 
 enum ENVIRONMENT {
   'debug' = 'debug',
@@ -86,17 +55,20 @@ export class Longboat {
       },
       writable: false, // see above ^
     });
+
+    this.readyStatus = true;
+    this.resolveQueue(this.existingQueue);
   }
 
   /**
    * @description runs after longboat is initiated, to make sure all functionality is available
    */
-  public ready() {
-    this.readyStatus = true;
-    this.resolveQueue(this.existingQueue);
-  }
+  // public ready() {
+  //   this.readyStatus = true;
+  //   this.resolveQueue(this.existingQueue);
+  // }
 
-  public setEnvironment(environment: keyof typeof ENVIRONMENT) {
+  public setEnvironment(environment: keyof typeof ENVIRONMENT): void {
     switch (environment.toLowerCase()) {
       case ENVIRONMENT.debug:
         this.baseUrl = LONGBOATURLS.debug;
@@ -114,7 +86,7 @@ export class Longboat {
     this.environment = environment;
   }
 
-  public setProperties(propertiesObject: TLongboatProperties) {
+  public setProperties(propertiesObject: TLongboatProperties): void {
     try {
       this.properties = { ...this.properties, ...propertiesObject };
     } catch (err) {
@@ -122,11 +94,7 @@ export class Longboat {
     }
   }
 
-  /**
-   *
-   * @param {IQueryTrackingObject} trackingObject
-   */
-  private buildQuery(trackingObject: IQueryTrackingObject, once = true) {
+  private buildQuery(trackingObject: TLongboatProperties, once = true) {
     try {
       if (once && !this.isUnique(trackingObject)) {
         console.warn(
@@ -138,9 +106,9 @@ export class Longboat {
       }
 
       const queryObject = {
+        ets: Date.now(),
         ...this.properties,
         ...trackingObject,
-        ets: Date.now(),
       };
 
       if (!validateProperties(queryObject)) {
@@ -158,7 +126,7 @@ export class Longboat {
     }
   }
 
-  private isUnique(trackingObject: IQueryTrackingObject) {
+  private isUnique(trackingObject: TLongboatProperties) {
     const trackingObjectString = JSON.stringify(trackingObject);
     const exists = this.uniqueQueue.find((el) => el === trackingObjectString);
     if (exists) return false;
