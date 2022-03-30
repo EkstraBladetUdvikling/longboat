@@ -55,18 +55,15 @@ export class Longboat {
       },
       writable: false, // see above ^
     });
-
-    this.readyStatus = true;
-    this.resolveQueue(this.existingQueue);
   }
 
   /**
    * @description runs after longboat is initiated, to make sure all functionality is available
    */
-  // public ready() {
-  //   this.readyStatus = true;
-  //   this.resolveQueue(this.existingQueue);
-  // }
+  public ready() {
+    this.readyStatus = true;
+    this.resolveQueue(this.existingQueue);
+  }
 
   public setEnvironment(environment: keyof typeof ENVIRONMENT): void {
     switch (environment.toLowerCase()) {
