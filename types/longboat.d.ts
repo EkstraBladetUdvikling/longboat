@@ -28,6 +28,7 @@ export declare class Longboat {
     /**
      * @description runs after longboat is initiated, to make sure all functionality is available
      */
+    ready(): void;
     setEnvironment(environment: keyof typeof ENVIRONMENT): void;
     setProperties(propertiesObject: TLongboatProperties): void;
     private buildQuery;

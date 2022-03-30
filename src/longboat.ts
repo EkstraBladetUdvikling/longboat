@@ -1,4 +1,4 @@
-import type { TLongboatProperties, TQueue, ITrackingProperties } from './types';
+import type { ITrackingProperties, TLongboatProperties, TQueue } from './types';
 
 enum ENVIRONMENT {
   'debug' = 'debug',
@@ -16,7 +16,7 @@ enum LONGBOATURLS {
 }
 
 function validateProperties(checkProps: TLongboatProperties) {
-  const status = ['aid', 'ht'].find((prop) => !checkProps.hasOwnProperty(prop));
+  const status = ['aid', 'ht'].find((prop) => !checkProps[prop]);
   return !status;
 }
 
@@ -94,11 +94,7 @@ export class Longboat {
   private buildQuery(trackingObject: TLongboatProperties, once = true) {
     try {
       if (once && !this.isUnique(trackingObject)) {
-        console.warn(
-          `This has been tracked already ${
-            trackingObject.ht
-          } - ${JSON.stringify(trackingObject)}`
-        );
+        console.warn(`This has been tracked already ${trackingObject.ht} - ${JSON.stringify(trackingObject)}`);
         return;
       }
 
@@ -113,9 +109,7 @@ export class Longboat {
         return;
       }
 
-      const queryArray = Object.entries(queryObject).map(
-        ([key, value]) => `${key}=${value}`
-      );
+      const queryArray = Object.entries(queryObject).map(([key, value]) => `${key}=${value}`);
 
       this.send(`?${queryArray.join('&')}`);
     } catch (err) {
@@ -164,7 +158,7 @@ export class Longboat {
   private send(query: string) {
     try {
       if (this.baseUrl === LONGBOATURLS.debug) {
-        console.log('send this:', query);
+        console.debug('send this:', query);
       } else {
         window.navigator.sendBeacon(this.baseUrl + query);
       }
