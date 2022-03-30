@@ -44,8 +44,6 @@ window.longboat.queue = window.longboat.queue || [];
 <script async defer src="longboat.js"></script>
 ```
 
-
-
 ### Examples
 
 Links to examples
@@ -82,7 +80,7 @@ THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH RE
 
 - First of all make the changes needed to this repository.
 - Wait until a message is delivered in Slack #release
-- In eb-infra/deploy/public/cmp/helm change either the appVersion i Chart.yaml if the release should go to production otherwith change the tag property in the test- or production-values.yaml file.
+- In eb-infra/deploy/public/longboat/helm change either the appVersion i Chart.yaml if the release should go to production otherwith change the tag property in the test- or production-values.yaml file.
 - Commit the changes and wait until ArgoCD deployes the changes (up to 5 minutes wait)
 
 ## How to include

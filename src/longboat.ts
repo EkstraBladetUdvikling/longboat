@@ -105,7 +105,7 @@ export class Longboat {
       };
 
       if (!validateProperties(queryObject)) {
-        console.warn('Missing mandatory properties');
+        console.warn('Missing mandatory properties', queryObject);
         return;
       }
 
