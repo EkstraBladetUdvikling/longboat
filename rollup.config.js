@@ -1,7 +1,7 @@
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import { terser } from 'rollup-plugin-terser';
-import ts from 'rollup-plugin-ts';
+import typescript from '@rollup/plugin-typescript';
 
 const sharedTerserOptions = {
   format: {
@@ -24,7 +24,7 @@ const terserOptions = {
 };
 
 const plugins = [
-  ts(),
+  typescript(),
   resolve({
     browser: true,
   }),
