@@ -5,9 +5,11 @@
     "forceConsistentCasingInFileNames": true,
     "lib": ["dom", "es2017"],
     "outDir": "./",
-    "target": "es2015"
+    "target": "es2015",
+    "declaration": true,
+    "declarationDir": "./types"
   },
   "indent": [true, "spaces", 2],
-  "include": ["./src/*.ts"],
+  "include": ["./src/*.ts", "./src/*.d.ts"],
   "exclude": ["./node_modules"]
 }
