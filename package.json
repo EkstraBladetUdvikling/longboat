@@ -22,8 +22,7 @@
     "typescript": "^4.6.3"
   },
   "scripts": {
-    "build": "yarn rollup -c",
-    "declare": "yarn tsc src/longboat.ts --declaration --emitDeclarationOnly --declarationDir ../types",
+    "build": "yarn lint || { exit: 1; } && yarn rollup -c",
     "lint": "yarn eslint --fix './src/*.ts'"
   }
 }
