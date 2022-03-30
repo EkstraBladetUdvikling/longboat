@@ -4,10 +4,13 @@ WORKDIR /build
 
 COPY package*.json ./
 COPY rollup.config.js ./
+COPY .eslintignore ./
+COPY .eslintrc.js ./
 COPY tsconfig*.json ./
 COPY yarn.lock ./
 
 COPY src ./src
+COPY types ./types
 
 RUN npm install
 
