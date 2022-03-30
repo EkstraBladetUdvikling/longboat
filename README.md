@@ -106,7 +106,7 @@ The common scenario where the container is used as an external component on ekst
 Building the image locally can be done using
 
 ```sh
-docker build -t eb-cmp .
+docker build -t longboat .
 ```
 
 And running it
