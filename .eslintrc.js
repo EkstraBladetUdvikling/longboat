@@ -70,7 +70,7 @@ module.exports = {
       'error',
       {
         selector: 'typeLike',
-        format: ['PascalCase'],
+        format: ['PascalCase', 'snake_case'],
       },
       {
         selector: 'variableLike',

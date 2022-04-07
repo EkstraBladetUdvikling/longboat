@@ -1,9 +1,8 @@
 /**
  * Exsiting Longboat properties
  *
- * @description
- * Konto ID (aid) | Definere hvor data skal sendes hen. Anvendes f.eks. til at indentificerer Politikens Data
- * Dr Edition - areaId (areaid)
+ * Konto ID (aid) | Definere hvor data skal sendes hen. Anvendes f.eks. til at indentificerer Politikens Data<br/>
+ * Dr Edition - areaId (areaid)<br/>
  * Destinations artikel (articleid) | Artikel ID for den artikle man klikke på
  * Dr Edition - articleUrl (articleurl)
  * Artikeltype (at) | Typen på artiklen. F.eks. galleri, article default. mm
@@ -47,101 +46,60 @@
  * Side URL (url) | Siden URL inkl. querystring parms
  */
 export interface ILongboatVariables {
-  aid: number; // Konto ID (aid) | Definere hvor data skal sendes hen. Anvendes f.eks. til at indentificerer Politikens Data
-  areaid: string; // Dr Edition - areaId (areaid)
-  articleid: string; // Destinations artikel (articleid) | Artikel ID for den artikle man klikke på
-  articleurl: string; // Dr Edition - articleUrl (articleurl)
-  at: string; // Artikeltype (at) | Typen på artiklen. F.eks. galleri, article default. mm
-  bar: boolean; // Breaking artikel (bar) | er artiklen breaking
-  bfcache: boolean; // was bfcache used
-  cid: string; // Artikel ID (cid) | ID på content. I de fleste tilfælde artikel ID
-  cids: number[]; // Artikel ID liste (cids) | Liste af ID'er på content. I de fleste tilfælde artikel ID
-  cmpid: string; // CMP UUID (cmpid) | CMP bruger ID
-  cmsaid: string; // Space management (cmsaid) | F.eks.:topbaand_left
-  csstatus: boolean; // Consent status (csstatus) | Information om der er sagt OK efterspurgte consent(CookieBot CMP - se dowehaveconsent.ts for consent Types)"
-  deckid: string; // Dr Edition - dreDeckId (deckid)
-  ebid: string; // EB ID (ebid)
-  editionid: string; // Dr Edition - dreEditionId (editionid)
-  ekid: string; // Ekstern kampagne id (ekid) | Querystring parameter det indeholder info omkring kilder  brugeren kom fra. Skal aflæses fra querystring “ebcip”
-  ets: number; // Event tidspunkt (ets) | epoc event tidspunkt
-  evid: string; // (evid) | pagespecific uuid
   geo: string; // Lokalt serviceindhold geo (geo)| Querystring parameter der indeholder eventuelt gemt lokation (optional)
-  ht: string; // Hit type (ht) | indikerer typen af event der trackes, pageview, click etc
-  ikid: string; // Internt kampagne id (ikid)| Querystring parameter det indeholder info omkring kilder  brugeren kom fra. Skal aflæses fra querystring “utm_id”
-  ipad: boolean; // iPad | device was ipad
-  kh: boolean; // +Kunde hit (kh) | Indikerer hvis det er en +kunde der har loadet siden.
-  la: boolean; // Låst Artikel (la) | information omkring hvis det er en låst artikle f.eks. +artikel
   ld: number; // Destinations artikel (ld) | Artikel ID for den artikle man klikke på
-  lis: boolean; // Indlogget (lis) | True/false om en bruger er indlogget.
-  ln: string; // Liste navn (ln)
   lsicid: string; // Lokalt serviceindhold id (lsicid)| Querystring parameter der indeholder id på vist serviceindhold (optional)
-  nt: string; // Native artikel (nt) | Information omkring artiklen er en native artikel
   pfevt: string; // Payflow event (pfevt) | User action in payflow
-  pfs: string; // payflow step (pfs) | Which step in the payflow was shown
-  productid: string; // Dr Edition - dreProductId (productid)
-  recom_src: string; // Recommender src (recom_src) | ID på den recommender service der er brugt til at generere listen
-  ref: string; // Referrer (ref)
   rld: number; // Relateret link destinations artikel (rld) | Artikel ID for den artikle man klikke på
   rlt: string; // Relateret link type (rlt)
-  scroll: number; // Hvor langt har brugeren scrollet på artiklen
-  skid: string; // Sektions ID (skid) | ID på den sektion siden høre til. For det meste Esenic home section ID
-  spm: string; // Spacemanagement event (spm) | loaded, inview
-  ssoid: string; // SSO ID (ssoid) | Single Sign-On fra Medielogin
-  st: string; // Sidetype (st) | information omkring hvilke sidetype det er. F.eks. artikel eller Sektionsside
+
   topmenu: string; // Which button in menu was clicked
-  url: string; // Side URL (url) | Siden URL inkl. querystring parms
 }
 
 // As the above is all possible properties, we allow them to be optional
 export declare type TLongboatProperties = Partial<ILongboatVariables>;
 
-/**
- * @description Object to push to longboat queue
- */
-export interface ITrackingProperties extends TLongboatProperties {
-  eventType: string;
-  once?: boolean;
-}
-
 export declare type TQueue = ((() => void) | ITrackingProperties)[];
 
 // Core data
-declare type ICoreProperties = Pick<ILongboatVariables, 'aid' | 'cmpid' | 'csstatus' | 'ebid' | 'evid'>;
+export declare interface ICoreProperties {
+  aid: number; // Konto ID (aid) | Definere hvor data skal sendes hen. Anvendes f.eks. til at indentificerer Politikens Data
+  cmpid: string; // CMP UUID (cmpid) | CMP bruger ID
+  csstatus: boolean; // Consent status (csstatus) | Information om der er sagt OK efterspurgte consent(CookieBot CMP - se dowehaveconsent.ts for consent Types)"
+  ebid: string; // EB ID (ebid)
+  evid: string; // (evid) | pagespecific uuid
+}
+
 // Data regarding the specific event
-declare type IEventProperties = Pick<ILongboatVariables, 'ets' | 'ht'>;
+export declare interface IEventProperties {
+  ets: number; // Event tidspunkt (ets) | epoc event tidspunkt
+  ht: string; // Hit type (ht) | indikerer typen af event der trackes, pageview, click etc
+}
+
 // Data regarding the site / article
-declare type ISiteProperties = Pick<ILongboatVariables, 'bar' | 'bfcache' | 'cid' | 'nt' | 'skid' | 'st' | 'url'>;
+export declare interface ISiteProperties {
+  bar: boolean; // Breaking artikel (bar) | er artiklen breaking
+  bfcache: boolean; // was bfcache used
+  cid: string; // Artikel ID (cid) | ID på content. I de fleste tilfælde artikel ID
+  nt: string; // Native artikel (nt) | Information omkring artiklen er en native artikel
+  skid: string; // Sektions ID (skid) | ID på den sektion siden høre til. For det meste Esenic home section ID
+  st: string; // Sidetype (st) | information omkring hvilke sidetype det er. F.eks. artikel eller Sektionsside
+  url: string; // Side URL (url) | Siden URL inkl. querystring parms
+}
+
 // Data regarding the current user
-declare type IUserProperties = Pick<ILongboatVariables, 'kh' | 'lis' | 'ssoid'>;
+export declare interface IUserProperties {
+  kh: boolean; // +Kunde hit (kh) | Indikerer hvis det er en +kunde der har loadet siden.
+  lis: boolean; // Indlogget (lis) | True/false om en bruger er indlogget.
+  ssoid: string; // SSO ID (ssoid) | Single Sign-On fra Medielogin
+}
 
 /**
  * @description Mandatory properties for all longboat events is the sum of the above
  */
-export declare type IMandatoryProps = ISiteProperties & IEventProperties & ICoreProperties & IUserProperties;
+export declare type IMandatoryProps = IEventProperties & ICoreProperties;
 
-/**
- * Event types
- */
-// Pageview
-export declare type IPageviewData = IMandatoryProps &
-  Pick<ILongboatVariables, 'at' | 'ekid' | 'ikid' | 'ipad' | 'la' | 'pfs' | 'ref'>;
-
-// Contentinview
-export declare type IContentinviewData = IMandatoryProps &
-  Pick<ILongboatVariables, 'cids' | 'cmsaid' | 'ln' | 'recom_src'>;
-
-// Scroll
-export declare type IScrollEventData = IMandatoryProps & Pick<ILongboatVariables, 'scroll'>;
-
-// Dr edition click
-export declare type IDrEditionClick = IMandatoryProps &
-  Pick<ILongboatVariables, 'areaid' | 'articleid' | 'articleurl' | 'cmsaid' | 'deckid' | 'editionid' | 'productid'>;
-
-// Spacemanagement
-export declare type ISpacemanagementLoaded = IMandatoryProps & Pick<ILongboatVariables, 'cmsaid' | 'spm'>;
-
-// Spacemanagement inview
-export declare type ISpacemanagementInview = IMandatoryProps & Pick<ILongboatVariables, 'cmsaid' | 'spm'>;
+type cmsaid = string; // Space management (cmsaid) | F.eks.:topbaand_left
 
 /**
  * Video tracking
@@ -176,3 +134,104 @@ export interface IVideoSpecificProps {
 }
 
 export declare type IVideoEventData = IMandatoryProps & IVideoSpecificProps;
+
+/**
+ * Event types
+ */
+// Pageview
+export declare interface IPageviewData {
+  at: string; // Artikeltype (at) | Typen på artiklen. F.eks. galleri, article default. mm
+  ekid: string; // Ekstern kampagne id (ekid) | Querystring parameter det indeholder info omkring kilder  brugeren kom fra. Skal aflæses fra querystring “ebcip”
+  ikid: string; // Internt kampagne id (ikid)| Querystring parameter det indeholder info omkring kilder  brugeren kom fra. Skal aflæses fra querystring “utm_id”
+  ipad?: boolean; // iPad | device was ipad
+  la: boolean; // Låst Artikel (la) | information omkring hvis det er en låst artikle f.eks. +artikel
+  pfs: string; // payflow step (pfs) | Which step in the payflow was shown
+  ref: string; // Referrer (ref)
+}
+
+export declare interface IPageview {
+  eventType: 'pageview';
+  data: IPageviewData;
+}
+
+// Contentinview
+export declare interface IContentinviewData {
+  cids: number[]; // Artikel ID liste (cids) | Liste af ID'er på content. I de fleste tilfælde artikel ID
+  cmsaid: cmsaid;
+  ln: string; // Liste navn (ln)
+  recom_src?: string; // Recommender src (recom_src) | ID på den recommender service der er brugt til at generere listen
+}
+
+export declare interface IContentinview {
+  eventType: 'contentinview';
+  data: IContentinviewData;
+}
+
+// Scroll
+export declare interface IScrollEventData {
+  scroll: number; // Hvor langt har brugeren scrollet på artiklen
+}
+
+export declare interface IScrollEvent {
+  eventType: 'scroll';
+  data: IScrollEventData;
+}
+
+// Dr edition click
+export declare interface IDrEditionClickData {
+  areaid: string; // Dr Edition - areaId (areaid)
+  articleid: string; // Destinations artikel (articleid) | Artikel ID for den artikle man klikke på
+  articleurl: string; // Dr Edition - articleUrl (articleurl)
+  deckid: string; // Dr Edition - dreDeckId (deckid)
+  editionid: string; // Dr Edition - dreEditionId (editionid)
+  productid: string; // Dr Edition - dreProductId (productid)
+}
+
+export declare interface IDrEditionClick {
+  eventType: 'dredition';
+  data: IDrEditionClickData;
+}
+
+// Spacemanagement
+type TSpacemanagementEventType = 'spacemanagement';
+
+// Loaded
+export declare interface ISpacemanagementLoaded {
+  eventType: TSpacemanagementEventType;
+  data: {
+    cmsaid: cmsaid;
+    spm: 'loaded';
+  };
+}
+
+// Inview
+export declare interface ISpacemanagementInview {
+  eventType: TSpacemanagementEventType;
+  data: {
+    cmsaid: cmsaid;
+    spm: 'inview';
+  };
+}
+
+// Video
+export declare interface IVideoEvent {
+  eventType: 'video';
+  data: IVideoEventData;
+}
+
+export type LongboatEvent =
+  | IPageview
+  | IContentinview
+  | IScrollEvent
+  | IDrEditionClick
+  | ISpacemanagementLoaded
+  | ISpacemanagementInview
+  | IVideoEvent;
+
+/**
+ * @description Object to push to longboat queue
+ */
+export interface ITrackingProperties extends TLongboatProperties {
+  eventType: string;
+  once?: boolean;
+}

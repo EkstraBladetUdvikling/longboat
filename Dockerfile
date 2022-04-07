@@ -12,9 +12,9 @@ COPY yarn.lock ./
 COPY src ./src
 COPY types ./types
 
-RUN npm install
+RUN yarn install
 
-RUN npm run build
+RUN yarn build
 
 FROM nginx:stable-alpine
 

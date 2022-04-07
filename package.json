@@ -22,10 +22,11 @@
     "typescript": "^4.6.3"
   },
   "scripts": {
-    "build": "yarn lint || { echo 'linting failed' ; exit: 1; } && yarn declare && yarn build:ts",
+    "build": "yarn lint || { echo 'linting failed'; exit: 1; } && yarn declare && yarn build:ts",
     "build:ts": "yarn rollup -c",
     "declare": "yarn tsc src/longboat.ts --declaration --emitDeclarationOnly --declarationDir ./types",
     "lint": "yarn eslint --fix './src/*.ts'",
-    "prepublish": "yarn build"
+    "prepublish": "yarn build",
+    "docker:build": "docker build -t longboat ."
   }
 }
