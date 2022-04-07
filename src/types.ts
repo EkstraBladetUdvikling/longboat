@@ -200,7 +200,7 @@ type TSpacemanagementEventType = 'spacemanagement';
 
 interface ISpacemanagementData {
   cmsaid: cmsaid;
-  spm: 'loaded' | 'inview';
+  spm: 'inview' | 'loaded';
 }
 
 // Loaded
@@ -221,6 +221,23 @@ export declare interface ISpacemanagementInview extends ITrackingProperties {
   };
 }
 
+/**
+ * External link
+ *
+ * @description
+ * * extlt | external link type
+ * * extld | external link destination
+ */
+interface IExternalLinkData {
+  extlt: string;
+  extld: string;
+}
+
+export declare interface IExternalLink extends ITrackingProperties {
+  eventType: 'extlink';
+  data: IExternalLinkData;
+}
+
 // Video
 export declare interface IVideoEvent extends ITrackingProperties {
   eventType: 'video';
@@ -228,12 +245,13 @@ export declare interface IVideoEvent extends ITrackingProperties {
 }
 
 export type TLongboatEvent =
-  | IPageview
   | IContentinview
-  | IScrollEvent
   | IDrEditionClick
-  | ISpacemanagementLoaded
+  | IExternalLink
+  | IPageview
+  | IScrollEvent
   | ISpacemanagementInview
+  | ISpacemanagementLoaded
   | IVideoEvent;
 
 // As the above is all possible properties, we allow them to be optional
