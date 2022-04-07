@@ -1,4 +1,4 @@
-import type { ITrackingProperties, TLongboatProperties, TQueue } from './types';
+import type { TLongboatEvent, TLongboatProperties, TQueue } from './types';
 
 enum ENVIRONMENT {
   'debug' = 'debug',
@@ -143,7 +143,7 @@ export class Longboat {
         if (this.readyStatus) {
           if (typeof addedObject === 'function') {
             addedObject();
-          } else if ((addedObject as ITrackingProperties).eventType) {
+          } else if ((addedObject as TLongboatEvent).eventType) {
             this.track(addedObject);
           }
         } else {
@@ -167,14 +167,14 @@ export class Longboat {
     }
   }
 
-  private track(trackObj: ITrackingProperties) {
+  private track(trackObj: TLongboatEvent) {
     const { eventType, once, ...additionalProperties } = trackObj;
     this.uniqueEvents[eventType] = this.uniqueEvents[eventType] || 0;
     this.uniqueEvents[eventType]++;
     this.buildQuery(
       {
         ht: eventType,
-        ...additionalProperties,
+        ...additionalProperties.data,
       },
       once
     );

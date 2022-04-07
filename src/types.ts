@@ -52,14 +52,10 @@ export interface ILongboatVariables {
   pfevt: string; // Payflow event (pfevt) | User action in payflow
   rld: number; // Relateret link destinations artikel (rld) | Artikel ID for den artikle man klikke på
   rlt: string; // Relateret link type (rlt)
-
   topmenu: string; // Which button in menu was clicked
 }
 
-// As the above is all possible properties, we allow them to be optional
-export declare type TLongboatProperties = Partial<ILongboatVariables>;
-
-export declare type TQueue = ((() => void) | ITrackingProperties)[];
+export declare type TQueue = ((() => void) | TLongboatEvent)[];
 
 // Core data
 export declare interface ICoreProperties {
@@ -136,6 +132,13 @@ export interface IVideoSpecificProps {
 export declare type IVideoEventData = IMandatoryProps & IVideoSpecificProps;
 
 /**
+ * @description Object to push to longboat queue
+ */
+interface ITrackingProperties {
+  once?: boolean;
+}
+
+/**
  * Event types
  */
 // Pageview
@@ -149,7 +152,7 @@ export declare interface IPageviewData {
   ref: string; // Referrer (ref)
 }
 
-export declare interface IPageview {
+export declare interface IPageview extends ITrackingProperties {
   eventType: 'pageview';
   data: IPageviewData;
 }
@@ -162,7 +165,7 @@ export declare interface IContentinviewData {
   recom_src?: string; // Recommender src (recom_src) | ID på den recommender service der er brugt til at generere listen
 }
 
-export declare interface IContentinview {
+export declare interface IContentinview extends ITrackingProperties {
   eventType: 'contentinview';
   data: IContentinviewData;
 }
@@ -172,7 +175,7 @@ export declare interface IScrollEventData {
   scroll: number; // Hvor langt har brugeren scrollet på artiklen
 }
 
-export declare interface IScrollEvent {
+export declare interface IScrollEvent extends ITrackingProperties {
   eventType: 'scroll';
   data: IScrollEventData;
 }
@@ -187,7 +190,7 @@ export declare interface IDrEditionClickData {
   productid: string; // Dr Edition - dreProductId (productid)
 }
 
-export declare interface IDrEditionClick {
+export declare interface IDrEditionClick extends ITrackingProperties {
   eventType: 'dredition';
   data: IDrEditionClickData;
 }
@@ -195,8 +198,13 @@ export declare interface IDrEditionClick {
 // Spacemanagement
 type TSpacemanagementEventType = 'spacemanagement';
 
+interface ISpacemanagementData {
+  cmsaid: cmsaid;
+  spm: 'loaded' | 'inview';
+}
+
 // Loaded
-export declare interface ISpacemanagementLoaded {
+export declare interface ISpacemanagementLoaded extends ITrackingProperties {
   eventType: TSpacemanagementEventType;
   data: {
     cmsaid: cmsaid;
@@ -205,7 +213,7 @@ export declare interface ISpacemanagementLoaded {
 }
 
 // Inview
-export declare interface ISpacemanagementInview {
+export declare interface ISpacemanagementInview extends ITrackingProperties {
   eventType: TSpacemanagementEventType;
   data: {
     cmsaid: cmsaid;
@@ -214,12 +222,12 @@ export declare interface ISpacemanagementInview {
 }
 
 // Video
-export declare interface IVideoEvent {
+export declare interface IVideoEvent extends ITrackingProperties {
   eventType: 'video';
   data: IVideoEventData;
 }
 
-export type LongboatEvent =
+export type TLongboatEvent =
   | IPageview
   | IContentinview
   | IScrollEvent
@@ -228,10 +236,18 @@ export type LongboatEvent =
   | ISpacemanagementInview
   | IVideoEvent;
 
-/**
- * @description Object to push to longboat queue
- */
-export interface ITrackingProperties extends TLongboatProperties {
-  eventType: string;
-  once?: boolean;
-}
+// As the above is all possible properties, we allow them to be optional
+export declare type TLongboatProperties = Partial<IAllLongboatProps>;
+
+export declare interface IAllLongboatProps
+  extends ILongboatVariables,
+    ICoreProperties,
+    IEventProperties,
+    ISiteProperties,
+    IUserProperties,
+    IPageviewData,
+    IContentinviewData,
+    IScrollEventData,
+    IDrEditionClick,
+    ISpacemanagementData,
+    IVideoEventData {}
