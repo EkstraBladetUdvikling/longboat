@@ -2,8 +2,8 @@
  * Exsiting Longboat properties
  *
  * @description
- * Konto ID (aid) | Definere hvor data skal sendes hen. Anvendes f.eks. til at indentificerer hvor data stammer fra<br/>
- * Dr Edition - areaId (areaid)<br/>
+ * Konto ID (aid) | Definere hvor data skal sendes hen. Anvendes f.eks. til at indentificerer hvor data stammer fra
+ * Dr Edition - areaId (areaid)
  * Destinations artikel (articleid) | Artikel ID for den artikle man klikke på
  * Dr Edition - articleUrl (articleurl)
  * Artikeltype (at) | Typen på artiklen. F.eks. galleri, article default. mm
