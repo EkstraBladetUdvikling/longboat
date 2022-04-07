@@ -168,13 +168,13 @@ export class Longboat {
   }
 
   private track(trackObj: TLongboatEvent) {
-    const { eventType, once, ...additionalProperties } = trackObj;
+    const { data, eventType, once } = trackObj;
     this.uniqueEvents[eventType] = this.uniqueEvents[eventType] || 0;
     this.uniqueEvents[eventType]++;
     this.buildQuery(
       {
         ht: eventType,
-        ...additionalProperties.data,
+        ...data,
       },
       once
     );

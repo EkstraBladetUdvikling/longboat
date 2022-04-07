@@ -171,7 +171,7 @@ export declare interface IDrEditionClick extends ITrackingProperties {
 declare type TSpacemanagementEventType = 'spacemanagement';
 interface ISpacemanagementData {
     cmsaid: cmsaid;
-    spm: 'loaded' | 'inview';
+    spm: 'inview' | 'loaded';
 }
 export declare interface ISpacemanagementLoaded extends ITrackingProperties {
     eventType: TSpacemanagementEventType;
@@ -187,11 +187,26 @@ export declare interface ISpacemanagementInview extends ITrackingProperties {
         spm: 'inview';
     };
 }
+/**
+ * External link
+ *
+ * @description
+ * * extlt | external link type
+ * * extld | external link destination
+ */
+interface IExternalLinkData {
+    extlt: string;
+    extld: string;
+}
+export declare interface IExternalLink extends ITrackingProperties {
+    eventType: 'extlink';
+    data: IExternalLinkData;
+}
 export declare interface IVideoEvent extends ITrackingProperties {
     eventType: 'video';
     data: IVideoEventData;
 }
-export declare type TLongboatEvent = IPageview | IContentinview | IScrollEvent | IDrEditionClick | ISpacemanagementLoaded | ISpacemanagementInview | IVideoEvent;
+export declare type TLongboatEvent = IContentinview | IDrEditionClick | IExternalLink | IPageview | IScrollEvent | ISpacemanagementInview | ISpacemanagementLoaded | IVideoEvent;
 export declare type TLongboatProperties = Partial<IAllLongboatProps>;
 export declare interface IAllLongboatProps extends ILongboatVariables, ICoreProperties, IEventProperties, ISiteProperties, IUserProperties, IPageviewData, IContentinviewData, IScrollEventData, IDrEditionClick, ISpacemanagementData, IVideoEventData {
 }
