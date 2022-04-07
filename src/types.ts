@@ -1,7 +1,8 @@
 /**
  * Exsiting Longboat properties
  *
- * Konto ID (aid) | Definere hvor data skal sendes hen. Anvendes f.eks. til at indentificerer Politikens Data<br/>
+ * @description
+ * Konto ID (aid) | Definere hvor data skal sendes hen. Anvendes f.eks. til at indentificerer hvor data stammer fra<br/>
  * Dr Edition - areaId (areaid)<br/>
  * Destinations artikel (articleid) | Artikel ID for den artikle man klikke på
  * Dr Edition - articleUrl (articleurl)
@@ -59,9 +60,9 @@ export declare type TQueue = ((() => void) | TLongboatEvent)[];
 
 // Core data
 export declare interface ICoreProperties {
-  aid: number; // Konto ID (aid) | Definere hvor data skal sendes hen. Anvendes f.eks. til at indentificerer Politikens Data
+  aid: number; // Konto ID (aid) | Definere hvor data skal sendes hen.
   cmpid: string; // CMP UUID (cmpid) | CMP bruger ID
-  csstatus: boolean; // Consent status (csstatus) | Information om der er sagt OK efterspurgte consent(CookieBot CMP - se dowehaveconsent.ts for consent Types)"
+  csstatus: boolean; // Consent status (csstatus) | Information om der er sagt OK efterspurgte consent"
   ebid: string; // EB ID (ebid)
   evid: string; // (evid) | pagespecific uuid
 }

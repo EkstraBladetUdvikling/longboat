@@ -1,7 +1,8 @@
 /**
  * Exsiting Longboat properties
  *
- * Konto ID (aid) | Definere hvor data skal sendes hen. Anvendes f.eks. til at indentificerer Politikens Data<br/>
+ * @description
+ * Konto ID (aid) | Definere hvor data skal sendes hen. Anvendes f.eks. til at indentificerer hvor data stammer fra<br/>
  * Dr Edition - areaId (areaid)<br/>
  * Destinations artikel (articleid) | Artikel ID for den artikle man klikke på
  * Dr Edition - articleUrl (articleurl)
