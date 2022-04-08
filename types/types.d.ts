@@ -2,7 +2,7 @@
  * Exsiting Longboat properties
  *
  * @description
- * Konto ID (aid) | Definere hvor data skal sendes hen. Anvendes f.eks. til at indentificerer Politikens Data
+ * Konto ID (aid) | Definere hvor data skal sendes hen. Anvendes f.eks. til at indentificerer hvor data stammer fra
  * Dr Edition - areaId (areaid)
  * Destinations artikel (articleid) | Artikel ID for den artikle man klikke på
  * Dr Edition - articleUrl (articleurl)
@@ -47,76 +47,45 @@
  * Side URL (url) | Siden URL inkl. querystring parms
  */
 export interface ILongboatVariables {
+    geo: string;
+    ld: number;
+    lsicid: string;
+    pfevt: string;
+    rld: number;
+    rlt: string;
+    topmenu: string;
+}
+export declare type TQueue = ((() => void) | TLongboatEvent)[];
+export declare interface ICoreProperties {
     aid: number;
-    areaid: string;
-    articleid: string;
-    articleurl: string;
-    at: string;
+    cmpid: string;
+    csstatus: boolean;
+    ebid: string;
+    evid: string;
+}
+export declare interface IEventProperties {
+    ets: number;
+    ht: string;
+}
+export declare interface ISiteProperties {
     bar: boolean;
     bfcache: boolean;
     cid: string;
-    cids: number[];
-    cmpid: string;
-    cmsaid: string;
-    csstatus: boolean;
-    deckid: string;
-    ebid: string;
-    editionid: string;
-    ekid: string;
-    ets: number;
-    evid: string;
-    geo: string;
-    ht: string;
-    ikid: string;
-    ipad: boolean;
-    kh: boolean;
-    la: boolean;
-    ld: number;
-    lis: boolean;
-    ln: string;
-    lsicid: string;
     nt: string;
-    pfevt: string;
-    pfs: string;
-    productid: string;
-    recom_src: string;
-    ref: string;
-    rld: number;
-    rlt: string;
-    scroll: number;
     skid: string;
-    spm: string;
-    ssoid: string;
     st: string;
-    topmenu: string;
     url: string;
 }
-export declare type TLongboatProperties = Partial<ILongboatVariables>;
-/**
- * @description Object to push to longboat queue
- */
-export interface ITrackingProperties extends TLongboatProperties {
-    eventType: string;
-    once?: boolean;
+export declare interface IUserProperties {
+    kh: boolean;
+    lis: boolean;
+    ssoid: string;
 }
-export declare type TQueue = ((() => void) | ITrackingProperties)[];
-declare type ICoreProperties = Pick<ILongboatVariables, 'aid' | 'cmpid' | 'csstatus' | 'ebid' | 'evid'>;
-declare type IEventProperties = Pick<ILongboatVariables, 'ets' | 'ht'>;
-declare type ISiteProperties = Pick<ILongboatVariables, 'bar' | 'bfcache' | 'cid' | 'nt' | 'skid' | 'st' | 'url'>;
-declare type IUserProperties = Pick<ILongboatVariables, 'kh' | 'lis' | 'ssoid'>;
 /**
  * @description Mandatory properties for all longboat events is the sum of the above
  */
-export declare type IMandatoryProps = ISiteProperties & IEventProperties & ICoreProperties & IUserProperties;
-/**
- * Event types
- */
-export declare type IPageviewData = IMandatoryProps & Pick<ILongboatVariables, 'at' | 'ekid' | 'ikid' | 'ipad' | 'la' | 'pfs' | 'ref'>;
-export declare type IContentinviewData = IMandatoryProps & Pick<ILongboatVariables, 'cids' | 'cmsaid' | 'ln' | 'recom_src'>;
-export declare type IScrollEventData = IMandatoryProps & Pick<ILongboatVariables, 'scroll'>;
-export declare type IDrEditionClick = IMandatoryProps & Pick<ILongboatVariables, 'areaid' | 'articleid' | 'articleurl' | 'cmsaid' | 'deckid' | 'editionid' | 'productid'>;
-export declare type ISpacemanagementLoaded = IMandatoryProps & Pick<ILongboatVariables, 'cmsaid' | 'spm'>;
-export declare type ISpacemanagementInview = IMandatoryProps & Pick<ILongboatVariables, 'cmsaid' | 'spm'>;
+export declare type IMandatoryProps = IEventProperties & ICoreProperties;
+declare type cmsaid = string;
 /**
  * Video tracking
  *
@@ -149,4 +118,97 @@ export interface IVideoSpecificProps {
     vidtype: string;
 }
 export declare type IVideoEventData = IMandatoryProps & IVideoSpecificProps;
+/**
+ * @description Object to push to longboat queue
+ */
+interface ITrackingProperties {
+    once?: boolean;
+}
+/**
+ * Event types
+ */
+export declare interface IPageviewData {
+    at: string;
+    ekid: string;
+    ikid: string;
+    ipad?: boolean;
+    la: boolean;
+    pfs: string;
+    ref: string;
+}
+export declare interface IPageview extends ITrackingProperties {
+    eventType: 'pageview';
+    data: IPageviewData;
+}
+export declare interface IContentinviewData {
+    cids: number[];
+    cmsaid: cmsaid;
+    ln: string;
+    recom_src?: string;
+}
+export declare interface IContentinview extends ITrackingProperties {
+    eventType: 'contentinview';
+    data: IContentinviewData;
+}
+export declare interface IScrollEventData {
+    scroll: number;
+}
+export declare interface IScrollEvent extends ITrackingProperties {
+    eventType: 'scroll';
+    data: IScrollEventData;
+}
+export declare interface IDrEditionClickData {
+    areaid: string;
+    articleid: string;
+    articleurl: string;
+    deckid: string;
+    editionid: string;
+    productid: string;
+}
+export declare interface IDrEditionClick extends ITrackingProperties {
+    eventType: 'dredition';
+    data: IDrEditionClickData;
+}
+declare type TSpacemanagementEventType = 'spacemanagement';
+interface ISpacemanagementData {
+    cmsaid: cmsaid;
+    spm: 'inview' | 'loaded';
+}
+export declare interface ISpacemanagementLoaded extends ITrackingProperties {
+    eventType: TSpacemanagementEventType;
+    data: {
+        cmsaid: cmsaid;
+        spm: 'loaded';
+    };
+}
+export declare interface ISpacemanagementInview extends ITrackingProperties {
+    eventType: TSpacemanagementEventType;
+    data: {
+        cmsaid: cmsaid;
+        spm: 'inview';
+    };
+}
+/**
+ * External link
+ *
+ * @description
+ * * extlt | external link type
+ * * extld | external link destination
+ */
+interface IExternalLinkData {
+    extlt: string;
+    extld: string;
+}
+export declare interface IExternalLink extends ITrackingProperties {
+    eventType: 'extlink';
+    data: IExternalLinkData;
+}
+export declare interface IVideoEvent extends ITrackingProperties {
+    eventType: 'video';
+    data: IVideoEventData;
+}
+export declare type TLongboatEvent = IContentinview | IDrEditionClick | IExternalLink | IPageview | IScrollEvent | ISpacemanagementInview | ISpacemanagementLoaded | IVideoEvent;
+export declare type TLongboatProperties = Partial<IAllLongboatProps>;
+export declare interface IAllLongboatProps extends ILongboatVariables, ICoreProperties, IEventProperties, ISiteProperties, IUserProperties, IPageviewData, IContentinviewData, IScrollEventData, IDrEditionClick, ISpacemanagementData, IVideoEventData {
+}
 export {};
