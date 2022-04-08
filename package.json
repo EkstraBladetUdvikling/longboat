@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "main": "longboat.js",
   "license": "MIT",
+  "files": [
+    "./types"
+  ],
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.0.3",
     "@rollup/plugin-node-resolve": "^13.1.3",
