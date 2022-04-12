@@ -23,7 +23,7 @@ function validateProperties(checkProps: TLongboatProperties) {
 export class Longboat {
   public exposedQueue: TQueue = [];
   public properties: TLongboatProperties = {
-    url: window.location.href,
+    url: encodeURIComponent(window.location.href),
   };
   public queue: TQueue = [];
 
