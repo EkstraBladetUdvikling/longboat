@@ -11,8 +11,8 @@ enum ENVIRONMENT {
 
 enum LONGBOATURLS {
   'debug' = '',
-  'prod' = 'https://longboat.ekstrabladet.dk',
-  'test' = 'https://longboat-test.ekstrabladet.dk',
+  'prod' = 'https://longboat.ekstrabladet.dk/v1',
+  'test' = 'https://longboat-test.ekstrabladet.dk/v1',
 }
 
 function validateProperties(checkProps: TLongboatProperties) {
@@ -109,9 +109,9 @@ export class Longboat {
         return;
       }
 
-      const queryArray = Object.entries(queryObject).map(([key, value]) => `${key}=${value}`);
+      // const queryArray = Object.entries(queryObject).map(([key, value]) => `${key}=${value}`);
 
-      this.send(`?${queryArray.join('&')}`);
+      this.send(queryObject);
     } catch (err) {
       console.error('longboat.buildQuery', err);
     }
@@ -155,15 +155,16 @@ export class Longboat {
     }
   }
 
-  private send(query: string) {
+  private send(sendObject: any) {
     try {
       if (this.baseUrl === LONGBOATURLS.debug) {
-        console.debug('send this:', query);
+        console.debug('send this:', sendObject);
       } else {
-        window.navigator.sendBeacon(this.baseUrl + query);
+        const sendBlop = new Blob([JSON.stringify(sendObject)], { type: 'application/json' });
+        window.navigator.sendBeacon(this.baseUrl, sendBlop);
       }
     } catch (err) {
-      console.error('longboat.send', err, 'query', query);
+      console.error('longboat.send', err, 'query', sendObject);
     }
   }
 

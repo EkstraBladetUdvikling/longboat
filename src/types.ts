@@ -46,6 +46,7 @@
  * Which button in menu was clicked
  * Side URL (url) | Siden URL inkl. querystring parms
  */
+
 export interface ILongboatVariables {
   geo: string; // Lokalt serviceindhold geo (geo)| Querystring parameter der indeholder eventuelt gemt lokation (optional)
   ld: number; // Destinations artikel (ld) | Artikel ID for den artikle man klikke på

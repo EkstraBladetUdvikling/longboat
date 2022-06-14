@@ -9,8 +9,8 @@ declare enum ENVIRONMENT {
 }
 declare enum LONGBOATURLS {
     'debug' = "",
-    'prod' = "https://longboat.ekstrabladet.dk",
-    'test' = "https://longboat-test.ekstrabladet.dk"
+    'prod' = "https://longboat.ekstrabladet.dk/v1",
+    'test' = "https://longboat-test.ekstrabladet.dk/v1"
 }
 export declare class Longboat {
     exposedQueue: TQueue;
