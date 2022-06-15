@@ -77,7 +77,7 @@ export declare interface IExtended${schemaTypeName} {
   once?: boolean;
 }
 `);
-    interfacePartials.push(`Partial<${schemaTypeName}>`);
+    interfacePartials.push(`${schemaTypeName}`);
     interfaceExtendedNames.push(`IExtended${schemaTypeName}`);
   });
 
@@ -90,8 +90,7 @@ export declare interface IExtended${schemaTypeName} {
 ${interfaceExports.join('')}
 export type TLongboatEvent = ${interfaceExtendedNames.join('|')};
 
-export declare interface IAllLongboatProps
-extends ${interfacePartials.join(',')} {}
+export declare type IAllLongboatProps = ${interfacePartials.join('|')};
 `;
 
   fs.writeFileSync(`${outDirLongboat}/index.d.ts`, indexContent);

@@ -24,7 +24,7 @@ function validateProperties(checkProps: IAllLongboatProps) {
 
 export class Longboat {
   public exposedQueue: TQueue = [];
-  public properties: IAllLongboatProps = {
+  public properties: Partial<IAllLongboatProps> = {
     url: encodeURIComponent(window.location.href),
   };
   public queue: TQueue = [];
@@ -93,7 +93,7 @@ export class Longboat {
     }
   }
 
-  private buildQuery(trackingObject: IAllLongboatProps, once = true) {
+  private buildLongboatData(trackingObject: IAllLongboatProps, once = true) {
     try {
       if (once && !this.isUnique(trackingObject)) {
         console.warn(`This has been tracked already ${trackingObject.ht} - ${JSON.stringify(trackingObject)}`);
@@ -115,7 +115,7 @@ export class Longboat {
 
       this.send(queryObject);
     } catch (err) {
-      console.error('longboat.buildQuery', err);
+      console.error('longboat.buildLongboatData', err);
     }
   }
 
@@ -174,7 +174,7 @@ export class Longboat {
     const { data, eventType, once } = trackObj;
     this.uniqueEvents[eventType] = this.uniqueEvents[eventType] || 0;
     this.uniqueEvents[eventType]++;
-    this.buildQuery(
+    this.buildLongboatData(
       {
         ht: eventType,
         ...data,
