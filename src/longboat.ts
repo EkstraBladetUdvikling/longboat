@@ -1,4 +1,4 @@
-import type { IAllLongboatProps, TLongboatEvent } from './longboat-types';
+import type { IAllLongboatProps, TLongboatEvent } from '../types/longboat-types';
 
 declare type TQueue = ((() => void) | TLongboatEvent)[];
 
@@ -157,7 +157,7 @@ export class Longboat {
     }
   }
 
-  private send(sendObject: any) {
+  private send(sendObject: IAllLongboatProps) {
     try {
       if (this.baseUrl === LONGBOATURLS.debug) {
         console.debug('send this:', sendObject);

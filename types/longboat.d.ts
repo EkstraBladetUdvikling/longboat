@@ -1,4 +1,4 @@
-import type { IAllLongboatProps, TLongboatEvent } from './longboat-types';
+import type { IAllLongboatProps, TLongboatEvent } from '../types/longboat-types';
 declare type TQueue = ((() => void) | TLongboatEvent)[];
 declare enum ENVIRONMENT {
     'debug' = "debug",
