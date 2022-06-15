@@ -1,4 +1,6 @@
-import type { TLongboatEvent, TLongboatProperties, TQueue } from './types';
+import type { IAllLongboatProps, TLongboatEvent } from './longboat-types';
+
+declare type TQueue = ((() => void) | TLongboatEvent)[];
 
 enum ENVIRONMENT {
   'debug' = 'debug',
@@ -15,14 +17,14 @@ enum LONGBOATURLS {
   'test' = 'https://longboat-test.ekstrabladet.dk/v1',
 }
 
-function validateProperties(checkProps: TLongboatProperties) {
+function validateProperties(checkProps: IAllLongboatProps) {
   const status = ['aid', 'ht'].find((prop) => !checkProps[prop]);
   return !status;
 }
 
 export class Longboat {
   public exposedQueue: TQueue = [];
-  public properties: TLongboatProperties = {
+  public properties: IAllLongboatProps = {
     url: encodeURIComponent(window.location.href),
   };
   public queue: TQueue = [];
@@ -83,7 +85,7 @@ export class Longboat {
     this.environment = environment;
   }
 
-  public setProperties(propertiesObject: TLongboatProperties): void {
+  public setProperties(propertiesObject: IAllLongboatProps): void {
     try {
       this.properties = { ...this.properties, ...propertiesObject };
     } catch (err) {
@@ -91,7 +93,7 @@ export class Longboat {
     }
   }
 
-  private buildQuery(trackingObject: TLongboatProperties, once = true) {
+  private buildQuery(trackingObject: IAllLongboatProps, once = true) {
     try {
       if (once && !this.isUnique(trackingObject)) {
         console.warn(`This has been tracked already ${trackingObject.ht} - ${JSON.stringify(trackingObject)}`);
@@ -99,7 +101,7 @@ export class Longboat {
       }
 
       const queryObject = {
-        ets: Date.now(),
+        ets: new Date().toISOString(),
         ...this.properties,
         ...trackingObject,
       };
@@ -117,7 +119,7 @@ export class Longboat {
     }
   }
 
-  private isUnique(trackingObject: TLongboatProperties) {
+  private isUnique(trackingObject: IAllLongboatProps) {
     const trackingObjectString = JSON.stringify(trackingObject);
     const exists = this.uniqueQueue.find((el) => el === trackingObjectString);
     if (exists) return false;

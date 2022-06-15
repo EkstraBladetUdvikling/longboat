@@ -1,4 +1,5 @@
-import type { TLongboatProperties, TQueue } from './types';
+import type { IAllLongboatProps, TLongboatEvent } from './longboat-types';
+declare type TQueue = ((() => void) | TLongboatEvent)[];
 declare enum ENVIRONMENT {
     'debug' = "debug",
     'development' = "development",
@@ -14,7 +15,7 @@ declare enum LONGBOATURLS {
 }
 export declare class Longboat {
     exposedQueue: TQueue;
-    properties: TLongboatProperties;
+    properties: IAllLongboatProps;
     queue: TQueue;
     protected baseUrl: LONGBOATURLS;
     protected environment: keyof typeof ENVIRONMENT;
@@ -30,7 +31,7 @@ export declare class Longboat {
      */
     ready(): void;
     setEnvironment(environment: keyof typeof ENVIRONMENT): void;
-    setProperties(propertiesObject: TLongboatProperties): void;
+    setProperties(propertiesObject: IAllLongboatProps): void;
     private buildQuery;
     private isUnique;
     /**
