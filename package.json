@@ -35,6 +35,7 @@
     "prepublish": "node scripts/prepublish.mjs && yarn lint || { echo 'linting failed'; exit: 1; } && yarn declare",
     "docker:build": "docker build -t longboat .",
     "typing": "yarn node scripts/createtypes.mjs --run",
+    "typing:cached": "yarn node scripts/createtypes.mjs --run --cache",
     "typing:test": "yarn node scripts/createtypes.mjs --run --test"
   }
 }

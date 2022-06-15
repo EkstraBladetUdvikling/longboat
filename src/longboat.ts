@@ -1,4 +1,4 @@
-import type { IAllLongboatProps, TLongboatEvent } from '../types/longboat-types';
+import type { TAllLongboatProps, TLongboatEvent } from '../types/longboat-types';
 
 declare type TQueue = ((() => void) | TLongboatEvent)[];
 
@@ -17,14 +17,14 @@ enum LONGBOATURLS {
   'test' = 'https://longboat-test.ekstrabladet.dk/v1',
 }
 
-function validateProperties(checkProps: IAllLongboatProps) {
+function validateProperties(checkProps: TAllLongboatProps) {
   const status = ['aid', 'ht'].find((prop) => !checkProps[prop]);
   return !status;
 }
 
 export class Longboat {
   public exposedQueue: TQueue = [];
-  public properties: Partial<IAllLongboatProps> = {
+  public properties: Partial<TAllLongboatProps> = {
     url: encodeURIComponent(window.location.href),
   };
   public queue: TQueue = [];
@@ -85,7 +85,7 @@ export class Longboat {
     this.environment = environment;
   }
 
-  public setProperties(propertiesObject: IAllLongboatProps): void {
+  public setProperties(propertiesObject: TAllLongboatProps): void {
     try {
       this.properties = { ...this.properties, ...propertiesObject };
     } catch (err) {
@@ -93,7 +93,7 @@ export class Longboat {
     }
   }
 
-  private buildLongboatData(trackingObject: IAllLongboatProps, once = true) {
+  private buildLongboatData(trackingObject: TAllLongboatProps, once = true) {
     try {
       if (once && !this.isUnique(trackingObject)) {
         console.warn(`This has been tracked already ${trackingObject.ht} - ${JSON.stringify(trackingObject)}`);
@@ -119,7 +119,7 @@ export class Longboat {
     }
   }
 
-  private isUnique(trackingObject: IAllLongboatProps) {
+  private isUnique(trackingObject: TAllLongboatProps) {
     const trackingObjectString = JSON.stringify(trackingObject);
     const exists = this.uniqueQueue.find((el) => el === trackingObjectString);
     if (exists) return false;
@@ -157,7 +157,7 @@ export class Longboat {
     }
   }
 
-  private send(sendObject: IAllLongboatProps) {
+  private send(sendObject: TAllLongboatProps) {
     try {
       if (this.baseUrl === LONGBOATURLS.debug) {
         console.debug('send this:', sendObject);
