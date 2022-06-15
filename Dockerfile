@@ -9,13 +9,11 @@ COPY .eslintrc.js ./
 COPY tsconfig*.json ./
 COPY yarn.lock ./
 
-COPY scripts ./scripts
 COPY src ./src
-COPY types ./types
 
 RUN yarn install --ignore-scripts
 
-RUN yarn build:ts
+RUN yarn build
 
 FROM nginx:stable-alpine
 
