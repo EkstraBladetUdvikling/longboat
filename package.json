@@ -33,9 +33,9 @@
     "build:ts": "yarn rollup -c",
     "declare": "yarn tsc src/longboat.ts --declaration --emitDeclarationOnly --declarationDir ./types",
     "lint": "yarn eslint --fix './src/*.ts'",
-    "prepublish": "yarn build",
+    "prepublish": "node scripts/prepublish.mjs && yarn build",
     "docker:build": "docker build -t longboat .",
-    "typing": "yarn node scripts/gettypes.mjs",
-    "typing:test": "yarn node scripts/gettypes.mjs --test"
+    "typing": "yarn node scripts/createtypes.mjs --run",
+    "typing:test": "yarn node scripts/createtypes.mjs --run --test"
   }
 }
