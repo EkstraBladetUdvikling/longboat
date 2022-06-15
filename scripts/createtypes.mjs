@@ -33,9 +33,7 @@ export async function createTypes() {
   if (useCachedFiles) {
     const cached = readFileSync(`${outDirSchemas}/${typesCacheFile}`);
     filesToConvert.push(...JSON.parse(cached));
-  }
-
-  if (!useCachedFiles) {
+  } else {
     const result = await fetch(baseUrl);
 
     if (!existsSync(outDirSchemas)) {
