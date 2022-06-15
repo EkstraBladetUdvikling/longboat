@@ -9,7 +9,6 @@ const rl = createInterface({
 });
 
 rl.question(`Is longboat types up to date? [y/n] `, async (answer) => {
-  console.log('answer', answer);
   switch (answer.toLowerCase()) {
     case 'y':
     case 'yes':
