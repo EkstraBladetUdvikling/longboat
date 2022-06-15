@@ -5,7 +5,7 @@ import { compileFromFile } from 'json-schema-to-typescript';
 import fetch from 'node-fetch';
 
 const runtimeArguments = process.argv.slice(2);
-console.log('runtimeArguments', runtimeArguments);
+
 async function asyncForEach(array, callback) {
   if (array.length) {
     for (let index = 0; index < array.length; index++) {
@@ -15,10 +15,11 @@ async function asyncForEach(array, callback) {
 }
 
 (async () => {
-  const baseUrl = 'https://longboat-test.ekstrabladet.dk/schemas';
-  // runtimeArguments.indexOf('--test') !== -1
-  //   ? 'https://longboat-test.ekstrabladet.dk/schemas'
-  //   : 'https://longboat.ekstrabladet.dk/schemas';
+  const env = runtimeArguments.indexOf('--test') !== -1 ? 'TEST' : 'PROD';
+  const baseUrl =
+    env === 'TEST' ? 'https://longboat-test.ekstrabladet.dk/schemas' : 'https://longboat.ekstrabladet.dk/schemas';
+
+  console.log('Creating longboat types from:', env);
 
   const filesToConvert = [];
   const result = await fetch(baseUrl);
@@ -93,6 +94,7 @@ extends ${interfacePartials.join(',')} {}
     const errors = values.filter((val) => val.status === 'error');
     if (errors.length) {
       console.log(errors);
+      process.exit(1);
     } else {
       console.log('Succesfully converted all');
     }
