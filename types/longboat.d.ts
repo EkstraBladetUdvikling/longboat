@@ -15,7 +15,7 @@ declare enum LONGBOATURLS {
 }
 export declare class Longboat {
     exposedQueue: TQueue;
-    properties: IAllLongboatProps;
+    properties: Partial<IAllLongboatProps>;
     queue: TQueue;
     protected baseUrl: LONGBOATURLS;
     protected environment: keyof typeof ENVIRONMENT;
@@ -32,7 +32,7 @@ export declare class Longboat {
     ready(): void;
     setEnvironment(environment: keyof typeof ENVIRONMENT): void;
     setProperties(propertiesObject: IAllLongboatProps): void;
-    private buildQuery;
+    private buildLongboatData;
     private isUnique;
     /**
      * resolveQueue
