@@ -111,8 +111,6 @@ export class Longboat {
         return;
       }
 
-      // const queryArray = Object.entries(queryObject).map(([key, value]) => `${key}=${value}`);
-
       this.send(queryObject);
     } catch (err) {
       console.error('longboat.buildLongboatData', err);
@@ -140,6 +138,8 @@ export class Longboat {
       while (queue.length) {
         const addedObject = queue.shift();
         if (this.environment === ENVIRONMENT.debug) {
+          // eslint-disable-next-line no-console
+          console.log('DEBUG:', addedObject);
           this.exposedQueue.push(addedObject);
         }
         if (this.readyStatus) {
