@@ -1,6 +1,6 @@
 {
   "name": "@ekstra-bladet/longboat",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "main": "longboat.js",
   "license": "MIT",
   "files": [
