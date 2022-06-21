@@ -31,7 +31,7 @@ export declare class Longboat {
      */
     ready(): void;
     setEnvironment(environment: keyof typeof ENVIRONMENT): void;
-    setProperties(propertiesObject: TAllLongboatProps): void;
+    setProperties(propertiesObject: Partial<TAllLongboatProps>): void;
     private buildLongboatData;
     private isUnique;
     /**
