@@ -85,7 +85,7 @@ export class Longboat {
     this.environment = environment;
   }
 
-  public setProperties(propertiesObject: TAllLongboatProps): void {
+  public setProperties(propertiesObject: Partial<TAllLongboatProps>): void {
     try {
       this.properties = { ...this.properties, ...propertiesObject };
     } catch (err) {
