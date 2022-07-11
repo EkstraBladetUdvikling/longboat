@@ -25,7 +25,7 @@ function validateProperties(checkProps: TAllLongboatProps) {
 export class Longboat {
   public exposedQueue: TQueue = [];
   public properties: Partial<TAllLongboatProps> = {
-    url: encodeURIComponent(window.location.href),
+    url: window.location.href,
   };
   public queue: TQueue = [];
 
