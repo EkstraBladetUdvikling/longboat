@@ -10,9 +10,8 @@ COPY tsconfig*.json ./
 COPY yarn.lock ./
 
 COPY src ./src
-COPY types ./types
 
-RUN yarn install
+RUN yarn install --ignore-scripts
 
 RUN yarn build
 

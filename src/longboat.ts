@@ -1,4 +1,6 @@
-import type { TLongboatEvent, TLongboatProperties, TQueue } from './types';
+import type { TAllLongboatProps, TLongboatEvent } from '../types/longboat-types';
+
+declare type TQueue = ((() => void) | TLongboatEvent)[];
 
 enum ENVIRONMENT {
   'debug' = 'debug',
@@ -11,19 +13,19 @@ enum ENVIRONMENT {
 
 enum LONGBOATURLS {
   'debug' = '',
-  'prod' = 'https://longboat.ekstrabladet.dk',
-  'test' = 'https://longboat-test.ekstrabladet.dk',
+  'prod' = 'https://longboat.ekstrabladet.dk/v1',
+  'test' = 'https://longboat-test.ekstrabladet.dk/v1',
 }
 
-function validateProperties(checkProps: TLongboatProperties) {
+function validateProperties(checkProps: TAllLongboatProps) {
   const status = ['aid', 'ht'].find((prop) => !checkProps[prop]);
   return !status;
 }
 
 export class Longboat {
   public exposedQueue: TQueue = [];
-  public properties: TLongboatProperties = {
-    url: encodeURIComponent(window.location.href),
+  public properties: Partial<TAllLongboatProps> = {
+    url: window.location.href,
   };
   public queue: TQueue = [];
 
@@ -83,7 +85,7 @@ export class Longboat {
     this.environment = environment;
   }
 
-  public setProperties(propertiesObject: TLongboatProperties): void {
+  public setProperties(propertiesObject: Partial<TAllLongboatProps>): void {
     try {
       this.properties = { ...this.properties, ...propertiesObject };
     } catch (err) {
@@ -91,7 +93,7 @@ export class Longboat {
     }
   }
 
-  private buildQuery(trackingObject: TLongboatProperties, once = true) {
+  private buildLongboatData(trackingObject: TAllLongboatProps, once = true) {
     try {
       if (once && !this.isUnique(trackingObject)) {
         console.warn(`This has been tracked already ${trackingObject.ht} - ${JSON.stringify(trackingObject)}`);
@@ -99,7 +101,7 @@ export class Longboat {
       }
 
       const queryObject = {
-        ets: Date.now(),
+        ets: new Date().toISOString(),
         ...this.properties,
         ...trackingObject,
       };
@@ -109,15 +111,13 @@ export class Longboat {
         return;
       }
 
-      const queryArray = Object.entries(queryObject).map(([key, value]) => `${key}=${value}`);
-
-      this.send(`?${queryArray.join('&')}`);
+      this.send(queryObject);
     } catch (err) {
-      console.error('longboat.buildQuery', err);
+      console.error('longboat.buildLongboatData', err);
     }
   }
 
-  private isUnique(trackingObject: TLongboatProperties) {
+  private isUnique(trackingObject: TAllLongboatProps) {
     const trackingObjectString = JSON.stringify(trackingObject);
     const exists = this.uniqueQueue.find((el) => el === trackingObjectString);
     if (exists) return false;
@@ -138,6 +138,8 @@ export class Longboat {
       while (queue.length) {
         const addedObject = queue.shift();
         if (this.environment === ENVIRONMENT.debug) {
+          // eslint-disable-next-line no-console
+          console.log('DEBUG:', addedObject);
           this.exposedQueue.push(addedObject);
         }
         if (this.readyStatus) {
@@ -155,15 +157,16 @@ export class Longboat {
     }
   }
 
-  private send(query: string) {
+  private send(sendObject: TAllLongboatProps) {
     try {
       if (this.baseUrl === LONGBOATURLS.debug) {
-        console.debug('send this:', query);
+        console.debug('send this:', sendObject);
       } else {
-        window.navigator.sendBeacon(this.baseUrl + query);
+        const sendBlop = new Blob([JSON.stringify(sendObject)], { type: 'application/json' });
+        window.navigator.sendBeacon(this.baseUrl, sendBlop);
       }
     } catch (err) {
-      console.error('longboat.send', err, 'query', query);
+      console.error('longboat.send', err, 'query', sendObject);
     }
   }
 
@@ -171,7 +174,7 @@ export class Longboat {
     const { data, eventType, once } = trackObj;
     this.uniqueEvents[eventType] = this.uniqueEvents[eventType] || 0;
     this.uniqueEvents[eventType]++;
-    this.buildQuery(
+    this.buildLongboatData(
       {
         ht: eventType,
         ...data,

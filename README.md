@@ -1,15 +1,10 @@
 # Longboat
 
-> Tagline
-
 Longboat is Ekstra Bladets inhouse web analytics system.
-
-Screenshot?
 
 ## Table Of Content
 
 * [Getting Started](#getting-started)
-  * [Dependencies](#dependencies)
   * [Usage](#usage)
   * [Examples](#examples)
 * [Contributing](#contributing)
@@ -20,13 +15,7 @@ Screenshot?
 
 ## Getting Started
 
-### Dependencies
-
-This module requires [Node.JS and NPM](https://www.npmjs.com/get-npm) for installation.. Add the module and install dependencies using NPM:
-
-```sh
-npm i name-here
-```
+The NPM module only exposes types for use in typescript projects
 
 ### Usage
 
@@ -53,7 +42,7 @@ Links to examples
 If you want to contribute to a project and make it better, your help is very welcome.
 
 ```sh
-git clone git@github.com:EkstraBladetUdvikling/...
+git clone git@github.com:EkstraBladetUdvikling/longboat
 ```
 
 ### Build
@@ -61,12 +50,8 @@ git clone git@github.com:EkstraBladetUdvikling/...
 Run build to output ES5 CommonJS-module for use with package manager (index.js).
 
 ```node
-npm run build
+yarn build
 ```
-
-### Test
-
-Optional
 
 ## License
 

@@ -1,4 +1,5 @@
-import type { TLongboatProperties, TQueue } from './types';
+import type { TAllLongboatProps, TLongboatEvent } from '../types/longboat-types';
+declare type TQueue = ((() => void) | TLongboatEvent)[];
 declare enum ENVIRONMENT {
     'debug' = "debug",
     'development' = "development",
@@ -9,12 +10,12 @@ declare enum ENVIRONMENT {
 }
 declare enum LONGBOATURLS {
     'debug' = "",
-    'prod' = "https://longboat.ekstrabladet.dk",
-    'test' = "https://longboat-test.ekstrabladet.dk"
+    'prod' = "https://longboat.ekstrabladet.dk/v1",
+    'test' = "https://longboat-test.ekstrabladet.dk/v1"
 }
 export declare class Longboat {
     exposedQueue: TQueue;
-    properties: TLongboatProperties;
+    properties: Partial<TAllLongboatProps>;
     queue: TQueue;
     protected baseUrl: LONGBOATURLS;
     protected environment: keyof typeof ENVIRONMENT;
@@ -30,8 +31,8 @@ export declare class Longboat {
      */
     ready(): void;
     setEnvironment(environment: keyof typeof ENVIRONMENT): void;
-    setProperties(propertiesObject: TLongboatProperties): void;
-    private buildQuery;
+    setProperties(propertiesObject: Partial<TAllLongboatProps>): void;
+    private buildLongboatData;
     private isUnique;
     /**
      * resolveQueue

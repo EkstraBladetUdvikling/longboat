@@ -1,0 +1,61 @@
+name: Linting
+
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - "src/*.ts"
+    types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+  lint-frontend:
+    if: github.event.pull_request.draft == false
+    name: Frontend Linting
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "yarn"
+          cache-dependency-path: ./yarn.lock
+
+      - name: Retrieve cached Node Modules
+        uses: actions/cache@v2
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Retrieve cached ESLint results
+        uses: actions/cache@v2
+        with:
+          path: "./.eslintcache"
+          key: ${{ runner.os }}-cache-eslint-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-cache-eslint-
+
+      - name: Install dependencies using Yarn
+        run: yarn install
+
+      - name: Find changed files
+        uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            typescript:
+              - '**/*.ts'
+
+      # run only if 'typescript' files were changed
+      - name: Lint typescript modules
+        if: steps.filter.outputs.typescript == 'true'
+        run: yarn lint
