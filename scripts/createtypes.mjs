@@ -85,7 +85,7 @@ export async function createTypes() {
     interfaceExports.push(`export type { ${schemaTypeName} } from './${schemaName}';
   import type { ${schemaTypeName} } from './${schemaName}';
   export declare interface IExtended${schemaTypeName} {
-    data: ${schemaTypeName};
+    data: Partial<${schemaTypeName}>;
     eventType: '${schemaName}';
     once?: boolean;
   }
