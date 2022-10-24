@@ -7,112 +7,112 @@
   export type { ArtikelInviewSchema } from './artikel-inview';
   import type { ArtikelInviewSchema } from './artikel-inview';
   export declare interface IExtendedArtikelInviewSchema {
-    data: ArtikelInviewSchema;
+    data: Partial<ArtikelInviewSchema>;
     eventType: 'artikel-inview';
     once?: boolean;
   }
   export type { ContentInviewSchema } from './contentinview';
   import type { ContentInviewSchema } from './contentinview';
   export declare interface IExtendedContentInviewSchema {
-    data: ContentInviewSchema;
+    data: Partial<ContentInviewSchema>;
     eventType: 'contentinview';
     once?: boolean;
   }
   export type { DrEditionClickSchema } from './dreclick';
   import type { DrEditionClickSchema } from './dreclick';
   export declare interface IExtendedDrEditionClickSchema {
-    data: DrEditionClickSchema;
+    data: Partial<DrEditionClickSchema>;
     eventType: 'dreclick';
     once?: boolean;
   }
   export type { EventSchema } from './event';
   import type { EventSchema } from './event';
   export declare interface IExtendedEventSchema {
-    data: EventSchema;
+    data: Partial<EventSchema>;
     eventType: 'event';
     once?: boolean;
   }
   export type { ExternalLinksSchema } from './extlink';
   import type { ExternalLinksSchema } from './extlink';
   export declare interface IExtendedExternalLinksSchema {
-    data: ExternalLinksSchema;
+    data: Partial<ExternalLinksSchema>;
     eventType: 'extlink';
     once?: boolean;
   }
   export type { GalleryClickSchema } from './gallery';
   import type { GalleryClickSchema } from './gallery';
   export declare interface IExtendedGalleryClickSchema {
-    data: GalleryClickSchema;
+    data: Partial<GalleryClickSchema>;
     eventType: 'gallery';
     once?: boolean;
   }
   export type { ListeClicksSchema } from './lists';
   import type { ListeClicksSchema } from './lists';
   export declare interface IExtendedListeClicksSchema {
-    data: ListeClicksSchema;
+    data: Partial<ListeClicksSchema>;
     eventType: 'lists';
     once?: boolean;
   }
   export type { MitEbSchema } from './miteb';
   import type { MitEbSchema } from './miteb';
   export declare interface IExtendedMitEbSchema {
-    data: MitEbSchema;
+    data: Partial<MitEbSchema>;
     eventType: 'miteb';
     once?: boolean;
   }
   export type { PageviewSchema } from './pageview';
   import type { PageviewSchema } from './pageview';
   export declare interface IExtendedPageviewSchema {
-    data: PageviewSchema;
+    data: Partial<PageviewSchema>;
     eventType: 'pageview';
     once?: boolean;
   }
   export type { PixelInviewSchema } from './pixel-inview';
   import type { PixelInviewSchema } from './pixel-inview';
   export declare interface IExtendedPixelInviewSchema {
-    data: PixelInviewSchema;
+    data: Partial<PixelInviewSchema>;
     eventType: 'pixel-inview';
     once?: boolean;
   }
   export type { PlusPayflowSchema } from './plus-payflow';
   import type { PlusPayflowSchema } from './plus-payflow';
   export declare interface IExtendedPlusPayflowSchema {
-    data: PlusPayflowSchema;
+    data: Partial<PlusPayflowSchema>;
     eventType: 'plus-payflow';
     once?: boolean;
   }
   export type { RelateredeLinksSchema } from './rellink';
   import type { RelateredeLinksSchema } from './rellink';
   export declare interface IExtendedRelateredeLinksSchema {
-    data: RelateredeLinksSchema;
+    data: Partial<RelateredeLinksSchema>;
     eventType: 'rellink';
     once?: boolean;
   }
   export type { ScrollSchema } from './scroll';
   import type { ScrollSchema } from './scroll';
   export declare interface IExtendedScrollSchema {
-    data: ScrollSchema;
+    data: Partial<ScrollSchema>;
     eventType: 'scroll';
     once?: boolean;
   }
   export type { SpaceManagementSchema } from './spacemanagement';
   import type { SpaceManagementSchema } from './spacemanagement';
   export declare interface IExtendedSpaceManagementSchema {
-    data: SpaceManagementSchema;
+    data: Partial<SpaceManagementSchema>;
     eventType: 'spacemanagement';
     once?: boolean;
   }
   export type { TopmenuSchema } from './topmenu';
   import type { TopmenuSchema } from './topmenu';
   export declare interface IExtendedTopmenuSchema {
-    data: TopmenuSchema;
+    data: Partial<TopmenuSchema>;
     eventType: 'topmenu';
     once?: boolean;
   }
   export type { VideoSchema } from './video';
   import type { VideoSchema } from './video';
   export declare interface IExtendedVideoSchema {
-    data: VideoSchema;
+    data: Partial<VideoSchema>;
     eventType: 'video';
     once?: boolean;
   }

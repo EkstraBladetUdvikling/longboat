@@ -14,6 +14,7 @@ export type Bfcache = boolean | null;
 export type Cid = string;
 export type Cmpid = string;
 export type Cmsaid = string;
+export type Cparent = string | null;
 export type Csstatus = boolean | null;
 export type Deckid = string;
 export type Ebid = string;
@@ -48,6 +49,7 @@ export interface DrEditionClickSchema {
   cid?: Cid;
   cmpid?: Cmpid;
   cmsaid?: Cmsaid;
+  cparent?: Cparent;
   csstatus?: Csstatus;
   deckid?: Deckid;
   ebid?: Ebid;

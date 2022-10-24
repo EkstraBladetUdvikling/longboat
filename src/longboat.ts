@@ -1,3 +1,5 @@
+export type { TAllLongboatProps, TLongboatEvent } from '../types/longboat-types';
+
 import type { TAllLongboatProps, TLongboatEvent } from '../types/longboat-types';
 
 declare type TQueue = ((() => void) | TLongboatEvent)[];
@@ -17,7 +19,7 @@ enum LONGBOATURLS {
   'test' = 'https://longboat-test.ekstrabladet.dk/v1',
 }
 
-function validateProperties(checkProps: TAllLongboatProps) {
+function validateProperties(checkProps: Partial<TAllLongboatProps>) {
   const status = ['aid', 'ht'].find((prop) => !checkProps[prop]);
   return !status;
 }
@@ -93,7 +95,7 @@ export class Longboat {
     }
   }
 
-  private buildLongboatData(trackingObject: TAllLongboatProps, once = true) {
+  private buildLongboatData(trackingObject: Partial<TAllLongboatProps>, once = true) {
     try {
       if (once && !this.isUnique(trackingObject)) {
         console.warn(`This has been tracked already ${trackingObject.ht} - ${JSON.stringify(trackingObject)}`);
@@ -117,7 +119,7 @@ export class Longboat {
     }
   }
 
-  private isUnique(trackingObject: TAllLongboatProps) {
+  private isUnique(trackingObject: Partial<TAllLongboatProps>) {
     const trackingObjectString = JSON.stringify(trackingObject);
     const exists = this.uniqueQueue.find((el) => el === trackingObjectString);
     if (exists) return false;
@@ -157,7 +159,7 @@ export class Longboat {
     }
   }
 
-  private send(sendObject: TAllLongboatProps) {
+  private send(sendObject: Partial<TAllLongboatProps>) {
     try {
       if (this.baseUrl === LONGBOATURLS.debug) {
         console.debug('send this:', sendObject);
